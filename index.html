@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cursos de Programación</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(90deg, #1e3c72, #2a5298);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .auth-container {
+      text-align: right;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 1rem;
+    }
+
+    .auth-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .auth-form input,
+    .auth-form button {
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 20px;
+      background-color: #333;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background-color: #0072ff;
+      color: #fff;
+    }
+
+    .search-bar {
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .search-bar input {
+      width: 80%;
+      max-width: 500px;
+      padding: 0.6rem;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 1rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .course-card {
+      background-color: #1f1f1f;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .course-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .course-img {
+      height: 160px;
+      background-color: #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-weight: bold;
+    }
+
+    .course-body {
+      padding: 1rem;
+    }
+
+    .course-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-category {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-bottom: 0.5rem;
+    }
+
+    .course-description {
+      font-size: 0.9rem;
+      color: #ccc;
+      max-height: 60px;
+      overflow: hidden;
+    }
+
+    .progress-badge {
+      background-color: #0072ff;
+      color: white;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+
+    .pagination {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .pagination button {
+      margin: 0 5px;
+      padding: 0.5rem 0.8rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+    }
+
+    .pagination button.active {
+      background-color: #0072ff;
+    }
+
+    footer {
+      background-color: #181818;
+      text-align: center;
+      padding: 1rem;
+      color: #777;
+      font-size: 0.9rem;
+      border-top: 1px solid #222;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: #222;
+      padding: 2rem;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      position: relative;
+      color: #fff;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .comment-section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #444;
+    }
+
+    .comment-section textarea {
+      width: 100%;
+      height: 80px;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      resize: none;
+    }
+
+    .comment-section button {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #0072ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .comment {
+      margin-top: 0.5rem;
+      background-color: #2b2b2b;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Plataforma de Cursos de Programación</h1>
+  <p>Aprende a programar desde cero hasta convertirte en desarrollador profesional</p>
+</header>
+
+<div class="auth-container">
+  <div class="auth-form">
+    <input type="text" id="username" placeholder="Nombre de usuario" />
+    <input type="password" id="password" placeholder="Contraseña" />
+    <button onclick="login()">Iniciar Sesión</button>
+    <button onclick="register()">Registrar</button>
+    <button onclick="simulateGoogleLogin()">Entrar con Google</button>
+    <span id="userStatus"></span>
+  </div>
+</div>
+
+<nav>
+  <button class="filter-btn active" data-filter="all">Todos</button>
+  <button class="filter-btn" data-filter="python">Python</button>
+  <button class="filter-btn" data-filter="javascript">JavaScript</button>
+  <button class="filter-btn" data-filter="web">Desarrollo Web</button>
+</nav>
+
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Buscar curso..." onkeyup="filterCourses()" />
+</div>
+
+<main id="courses-container">
+  <!-- Los cursos se insertan dinámicamente -->
+</main>
+
+<div class="pagination" id="pagination"></div>
+
+<!-- Modal -->
+<div class="modal" id="course-modal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <h2 id="modal-title"></h2>
+    <p><strong>Categoría:</strong> <span id="modal-category"></span></p>
+    <p><strong>Descripción:</strong></p>
+    <p id="modal-description"></p>
+
+    <div class="comment-section">
+      <label for="new-comment"><strong>Tu comentario:</strong></label>
+      <textarea id="new-comment" placeholder="Escribe tu opinión..."></textarea>
+      <button onclick="addComment()">Enviar Comentario</button>
+
+      <h4 style="margin-top: 1rem;">Comentarios:</h4>
+      <div id="comments-list"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  &copy; {new Date().getFullYear()} Plataforma de Cursos | Todos los derechos reservados
+</footer>
+
+<script>
+  const courses = [
+    { title: "Curso de Python desde Cero", category: "python", description: "Aprende Python desde lo básico hasta estructuras avanzadas como POO, listas, diccionarios, etc." },
+    { title: "Introducción al Desarrollo Web", category: "web", description: "Conoce las tecnologías básicas del desarrollo web: HTML, CSS y JavaScript." },
+    { title: "Programación con JavaScript", category: "javascript", description: "Domina el lenguaje más usado del front-end y prepárate para frameworks modernos." },
+    { title: "Backend con Node.js", category: "javascript", description: "Lleva tus conocimientos de JS al backend con Node.js y crea APIs robustas." },
+    { title: "Automatización con Python", category: "python", description: "Usa Python para automatizar tareas repetitivas y mejorar tu productividad." },
+    { title: "React desde Cero", category: "javascript", description: "Entiende uno de los frameworks más usados del mercado y empieza a construir apps modernas." },
+    { title: "Bases de Datos SQL", category: "web", description: "Aprende a diseñar y gestionar bases de datos relacionales." },
+    { title: "Diseño Responsivo con CSS Grid", category: "web", description: "Crea diseños modernos y adaptables a cualquier dispositivo." },
+    { title: "Introducción a Flask", category: "python", description: "Crea aplicaciones web rápidas con el framework Flask en Python." },
+    { title: "TypeScript desde Cero", category: "javascript", description: "Mejora tu JavaScript con tipado estático y herramientas modernas." },
+    { title: "Testing con Jest", category: "javascript", description: "Aprende a probar tu código con Jest, uno de los frameworks más populares." },
+    { title: "Git y Control de Versiones", category: "web", description: "Domina Git para trabajar en proyectos colaborativos y profesionales." }
+  ];
+
+  let currentUser = null;
+  let currentCourse = null;
+
+  function login() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const user = JSON.parse(localStorage.getItem(username));
+
+    if (user && user.password === password) {
+      currentUser = username;
+      alert("Inicio de sesión exitoso.");
+      document.getElementById("userStatus").textContent = `Bienvenido, ${username}`;
+      renderCourses();
+    } else {
+      alert("Usuario o contraseña incorrectos.");
+    }
+  }
+
+  function register() {
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (localStorage.getItem(username)) {
+      alert("El usuario ya existe.");
+      return;
+    }
+
+    localStorage.setItem(username, JSON.stringify({ username, password }));
+    localStorage.setItem(`${username}_progress`, JSON.stringify([]));
+    localStorage.setItem(`${username}_comments`, JSON.stringify([]));
+    alert("Registro exitoso.");
+  }
+
+  function simulateGoogleLogin() {
+    // Simular autenticación con Google
+    const fakeEmail = "usuario@gmail.com";
+    let userData = JSON.parse(localStorage.getItem(fakeEmail));
+
+    if (!userData) {
+      userData = { username: fakeEmail, password: "google-auth" };
+      localStorage.setItem(fakeEmail, JSON.stringify(userData));
+      localStorage.setItem(`${fakeEmail}_progress`, JSON.stringify([]));
+      localStorage.setItem(`${fakeEmail}_comments`, JSON.stringify([]));
+    }
+
+    currentUser = fakeEmail;
+    document.getElementById("userStatus").textContent = `Bienvenido, ${fakeEmail}`;
+    alert("Inicio de sesión con Google exitoso.");
+    renderCourses();
+  }
+
+  let currentPage = 1;
+  const itemsPerPage = 4;
+
+  function renderCourses(filter = "all", page = 1, searchQuery = "") {
+    let filtered = [...courses];
+
+    if (filter !== "all") {
+      filtered = filtered.filter(c => c.category === filter);
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(c =>
+        c.title.toLowerCase().includes(query) ||
+        c.description.toLowerCase().includes(query)
+      );
+    }
+
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    const start = (page - 1) * itemsPerPage;
+    const paginated = filtered.slice(start, start + itemsPerPage);
+
+    const container = document.getElementById("courses-container");
+    container.innerHTML = "";
+
+    paginated.forEach(course => {
+      const card = document.createElement("div");
+      card.className = "course-card";
+      card.onclick = () => showModal(course);
+      const progress = getUserProgress(currentUser, course.title);
+      card.innerHTML = `
+        <div class="course-img">${course.title.slice(0, 3).toUpperCase()}</div>
+        ${progress > 0 ? `<div class="progress-badge">Progreso: ${progress}%</div>` : ''}
+        <div class="course-body">
+          <h3 class="course-title">${course.title}</h3>
+          <p class="course-category capitalize">${course.category}</p>
+          <p class="course-description">${course.description}</p>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    renderPagination(totalPages, filter, searchQuery);
+  }
+
+  function getUserProgress(user, title) {
+    if (!user) return 0;
+    const progressList = JSON.parse(localStorage.getItem(`${user}_progress`) || "[]");
+    const found = progressList.find(p => p.title === title);
+    return found ? found.progress : 0;
+  }
+
+  function updateProgress(title) {
+    if (!currentUser) return;
+    const progressList = JSON.parse(localStorage.getItem(`${currentUser}_progress`) || "[]");
+    const index = progressList.findIndex(p => p.title === title);
+    const newProgress = index >= 0 ? Math.min(progressList[index].progress + 20, 100) : 20;
+    if (index >= 0) {
+      progressList[index].progress = newProgress;
+    } else {
+      progressList.push({ title, progress: newProgress });
+    }
+    localStorage.setItem(`${currentUser}_progress`, JSON.stringify(progressList));
+  }
+
+  function showModal(course) {
+    currentCourse = course;
+    document.getElementById("modal-title").textContent = course.title;
+    document.getElementById("modal-category").textContent = course.category;
+    document.getElementById("modal-description").textContent = course.description;
+    loadComments(course.title);
+    document.getElementById("course-modal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("course-modal").style.display = "none";
+  }
+
+  function addComment() {
+    if (!currentUser) {
+      alert("Debes iniciar sesión para comentar.");
+      return;
+    }
+
+    const commentText = document.getElementById("new-comment").value.trim();
+    if (!commentText) return;
+
+    const comments = JSON.parse(localStorage.getItem(`${currentUser}_comments`) || "[]");
+    comments.push({
+      course: currentCourse.title,
+      text: commentText,
+      date: new Date().toLocaleString()
+    });
+    localStorage.setItem(`${currentUser}_comments`, JSON.stringify(comments));
+    loadComments(currentCourse.title);
+    document.getElementById("new-comment").value = "";
+  }
+
+  function loadComments(courseTitle) {
+    const commentsList = document.getElementById("comments-list");
+    commentsList.innerHTML = "";
+    if (!currentUser) return;
+
+    const comments = JSON.parse(localStorage.getItem(`${currentUser}_comments`) || "[]")
+      .filter(c => c.course === courseTitle);
+
+    if (comments.length === 0) {
+      commentsList.innerHTML = "<em>No hay comentarios aún.</em>";
+      return;
+    }
+
+    comments.forEach(comment => {
+      const div = document.createElement("div");
+      div.className = "comment";
+      div.innerHTML = `<small>${comment.date}</small><br/>${comment.text}`;
+      commentsList.appendChild(div);
+    });
+  }
+
+  function filterCourses() {
+    const searchQuery = document.getElementById("searchInput").value;
+    const activeFilter = document.querySelector(".filter-btn.active").dataset.filter;
+    currentPage = 1;
+    renderCourses(activeFilter, currentPage, searchQuery);
+  }
+
+  function setActiveFilterButtons() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentPage = 1;
+        renderCourses(btn.dataset.filter, currentPage);
+      });
+    });
+  }
+
+  function renderPagination(totalPages, filter, searchQuery) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      if (i === currentPage) btn.classList.add("active");
+      btn.onclick = () => {
+        currentPage = i;
+        renderCourses(filter, i, searchQuery);
+      };
+      pagination.appendChild(btn);
+    }
+  }
+
+  window.onload = () => {
+    setActiveFilterButtons();
+    renderCourses();
+  };
+</script>
+
+</body>
+</html>
